@@ -1,0 +1,60 @@
+.container-class {
+	overflow:hidden;
+	padding:2px;
+}
+
+.font-14 {
+	font-size: 14px;
+}
+
+.card-design {
+	padding:0px;
+	margin:5px;
+	max-width:24%;
+}
+
+.margin-top-5 {
+	margin-top: -5px;
+}
+
+.margin-7 {
+	margin:-7px;
+}
+
+.margin-10 {
+	margin:10px;
+}
+
+.margin-35 {
+	margin-top:-35px;
+}
+
+.margin-11pt {
+	margin-left: 11%;
+}
+
+.margin-20 {
+	margin-top:10px;
+	margin-bottom:70px;
+	/* margin-right:-33px; */
+	margin-left:5px;
+}
+
+.dashboard-table {
+	overflow-x:auto;
+	height:750px;
+}
+
+.img-custom {
+	height: 16px;
+	border: 1px solid gray;
+}
+
+.btn-100 {
+	width:100px;
+}
+
+.video-size {
+	padding-top:56% !important; 
+	height: 0;
+}

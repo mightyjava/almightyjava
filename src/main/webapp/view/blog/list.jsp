@@ -1,0 +1,1 @@
+<div class="container col-md-12">Blog List</div>
