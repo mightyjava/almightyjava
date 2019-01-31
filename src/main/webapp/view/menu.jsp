@@ -36,7 +36,7 @@
             		<i class="fa fa-address-book"></i> <spring:message code="label.address.list"/>
             	</a>
             	<a href="javascript:void(0);" class="nav-link" id="categoryList">
-            		<i class="fa fa-list-alt"></i> <spring:message code="label.category.list"/>
+            		<i class="fa fa-tags"></i> <spring:message code="label.category.list"/>
             	</a>
             	<a href="javascript:void(0);" class="nav-link" id="videoList">
             		<i class="fa fa-youtube-play"></i> <spring:message code="label.video.list"/>

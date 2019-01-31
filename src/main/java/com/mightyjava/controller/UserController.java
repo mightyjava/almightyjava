@@ -1,6 +1,7 @@
 package com.mightyjava.controller;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +18,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.mightyjava.captcha.CaptchaGenerator;
+import com.mightyjava.captcha.CaptchaUtils;
 import com.mightyjava.config.MessageConfig;
 import com.mightyjava.model.User;
 import com.mightyjava.service.UserService;
 import com.mightyjava.utils.ErrorUtils;
 import com.mightyjava.utils.MethodUtils;
+
+import nl.captcha.Captcha;
 
 @Controller
 @RequestMapping("/user")
@@ -32,6 +37,9 @@ public class UserController {
 
 	@Autowired
 	private MessageConfig messageConfig;
+	
+	@Autowired
+	private CaptchaGenerator captchaGenerator;
 
 	@RequestMapping("/login")
 	public String login(Model model, String error, String logout) {
@@ -43,8 +51,12 @@ public class UserController {
 	}
 
 	@GetMapping("/register")
-	public String register(Model model) {
+	public String register(Model model, HttpSession httpSession) {
 		model.addAttribute("userForm", new User());
+		
+		Captcha captcha = captchaGenerator.createCaptcha(200, 50);
+		httpSession.setAttribute("captcha", captcha.getAnswer());
+		model.addAttribute("captchaEncode", CaptchaUtils.encodeBase64(captcha));
 		return "register";
 	}
 

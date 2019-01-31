@@ -76,7 +76,7 @@
 						</div>
 						
 						<div class="input-group mb-3">
-							<img alt="captcha" src="${path}/captcha-servlet">
+							<img alt="captcha" class="img-thumbnail" src="data:image/png;base64,${captchaEncode}"/>
 						</div>
 						
 						<div class="input-group mb-3">
