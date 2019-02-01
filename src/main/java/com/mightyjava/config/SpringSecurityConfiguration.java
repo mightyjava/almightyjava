@@ -1,17 +1,15 @@
 package com.mightyjava.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.mightyjava.service.impl.MyUserDetailsService;
+import com.mightyjava.captcha.CaptchaAuthenticationProvider;
+import com.mightyjava.captcha.CaptchaDetailsSource;
 
 @Configuration
 @EnableWebSecurity
@@ -19,12 +17,15 @@ import com.mightyjava.service.impl.MyUserDetailsService;
 public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Autowired
-	private MyUserDetailsService userDetailsService;
+	private CaptchaAuthenticationProvider authenticationProvider;
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+		auth.authenticationProvider(authenticationProvider);
 	}
+	
+	@Autowired
+	private CaptchaDetailsSource detailsSource;
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -36,14 +37,9 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.antMatchers("/user/add").permitAll()
 			.antMatchers("/captcha-servlet").permitAll()
 			.anyRequest().authenticated().and()
-			.formLogin().loginPage("/user/login").permitAll().and()
+			.formLogin().loginPage("/user/login")
+			.authenticationDetailsSource(detailsSource).permitAll().and()
 			.logout().deleteCookies("remember-me").permitAll().and()
 			.rememberMe().tokenValiditySeconds(180); 
-	}
-
-	@Bean
-	public PasswordEncoder passwordEncoder(){
-		PasswordEncoder encoder = new BCryptPasswordEncoder();
-		return encoder;
 	}
 }

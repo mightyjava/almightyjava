@@ -62,6 +62,27 @@
 		          				<spring:message code="placeholder.password"/>
 		        			</div>
 						</div>
+						<c:if test="${not empty captchaEncode}">
+							<div class="input-group mb-3">
+								<img alt="captcha" class="img-thumbnail" src="data:image/png;base64,${captchaEncode}"/>
+							</div>
+						
+							<div class="input-group mb-3">
+								<div class="input-group-prepend">
+									<span class="input-group-text">
+										<i class="fa fa-key"></i>
+									</span>
+								</div>
+								<spring:message code="placeholder.captcha" var="captchaPlaceholder"/>
+								<input class="form-control" name="captcha" placeholder="${captchaPlaceholder}" required="true"/>
+								<div class="valid-feedback">
+							   		<spring:message code="label.valid.feedback"/>
+								</div>
+								<div class="invalid-feedback">
+			          				<spring:message code="placeholder.captcha"/>
+			        			</div>
+							</div>
+						</c:if>
 						<div class="input-group mb-3" style="margin-bottom: 0px !important;">
 							<div class="input-group-prepend">
 								<span class="input-group-text">

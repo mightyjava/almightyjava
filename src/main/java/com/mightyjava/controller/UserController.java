@@ -1,5 +1,7 @@
 package com.mightyjava.controller;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -10,19 +12,23 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.mightyjava.captcha.CaptchaGenerator;
 import com.mightyjava.captcha.CaptchaUtils;
 import com.mightyjava.config.MessageConfig;
 import com.mightyjava.model.User;
 import com.mightyjava.service.UserService;
+import com.mightyjava.utils.ConstantUtils;
 import com.mightyjava.utils.ErrorUtils;
 import com.mightyjava.utils.MethodUtils;
 
@@ -30,6 +36,7 @@ import nl.captcha.Captcha;
 
 @Controller
 @RequestMapping("/user")
+@SessionAttributes("counter")
 public class UserController {
 
 	@Autowired
@@ -40,13 +47,25 @@ public class UserController {
 	
 	@Autowired
 	private CaptchaGenerator captchaGenerator;
+	
+	@ModelAttribute("counter")
+	public AtomicInteger failureCounter() {
+		return new AtomicInteger(0);
+	}
 
 	@RequestMapping("/login")
-	public String login(Model model, String error, String logout) {
+	public String login(ModelMap model, String error, String logout, HttpSession httpSession) {
 		if (error != null)
 			model.addAttribute("error", messageConfig.getMessage("user.invalid.credentials"));
 		if (logout != null)
 			model.addAttribute("message", messageConfig.getMessage("user.logout.success"));
+		
+		AtomicInteger counter = (AtomicInteger) model.get("counter");
+		if(counter.intValue() >= ConstantUtils.MAX_CAPTCHA_TRIES) {
+			Captcha captcha = captchaGenerator.createCaptcha(200, 50);
+			httpSession.setAttribute("captcha", captcha);
+			model.addAttribute("captchaEncode", CaptchaUtils.encodeBase64(captcha));
+		}
 		return "login";
 	}
 

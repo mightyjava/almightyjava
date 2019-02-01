@@ -10,4 +10,6 @@ public class ConstantUtils {
             + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 	
 	public static final Integer PAGINATION_SIZE = 8;
+	
+	public static final Integer MAX_CAPTCHA_TRIES = 3;
 }
