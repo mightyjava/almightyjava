@@ -35,7 +35,6 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.antMatchers("/css/**").permitAll()
 			.antMatchers("/user/register").permitAll()
 			.antMatchers("/user/add").permitAll()
-			.antMatchers("/captcha-servlet").permitAll()
 			.anyRequest().authenticated().and()
 			.formLogin().loginPage("/user/login")
 			.authenticationDetailsSource(detailsSource).permitAll().and()

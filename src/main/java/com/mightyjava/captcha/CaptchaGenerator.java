@@ -4,7 +4,6 @@ import org.springframework.beans.factory.InitializingBean;
 
 import nl.captcha.Captcha;
 import nl.captcha.backgrounds.BackgroundProducer;
-import nl.captcha.backgrounds.SquigglesBackgroundProducer;
 import nl.captcha.backgrounds.TransparentBackgroundProducer;
 import nl.captcha.noise.CurvedLineNoiseProducer;
 import nl.captcha.noise.NoiseProducer;
