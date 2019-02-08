@@ -43,9 +43,6 @@ public class UserController {
 	private UserService userService;
 
 	@Autowired
-	private MessageConfig messageConfig;
-	
-	@Autowired
 	private CaptchaGenerator captchaGenerator;
 	
 	@ModelAttribute("counter")
@@ -54,11 +51,18 @@ public class UserController {
 	}
 
 	@RequestMapping("/login")
-	public String login(ModelMap model, String error, String logout, HttpSession httpSession) {
-		if (error != null)
-			model.addAttribute("error", messageConfig.getMessage("user.invalid.credentials"));
-		if (logout != null)
-			model.addAttribute("message", messageConfig.getMessage("user.logout.success"));
+	public String login(ModelMap model, HttpSession httpSession) {
+		Object error = httpSession.getAttribute("error");
+		if (error != null) {
+			model.addAttribute("error", error);
+			httpSession.removeAttribute("error");
+		}
+		
+		Object message = httpSession.getAttribute("message");
+		if (message != null) {
+			model.addAttribute("message", message);
+			httpSession.removeAttribute("message");
+		}
 		
 		AtomicInteger counter = (AtomicInteger) model.get("counter");
 		if(counter.intValue() >= ConstantUtils.MAX_CAPTCHA_TRIES) {
