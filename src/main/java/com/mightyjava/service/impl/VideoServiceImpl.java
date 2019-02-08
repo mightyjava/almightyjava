@@ -20,12 +20,12 @@ import com.mightyjava.model.Category;
 import com.mightyjava.model.Video;
 import com.mightyjava.repository.CategoryRepository;
 import com.mightyjava.repository.VideoRepository;
-import com.mightyjava.service.VideoService;
+import com.mightyjava.service.HelperService;
 import com.mightyjava.utils.ConstantUtils;
 
 @Service
 @Transactional(readOnly = true)
-public class VideoServiceImpl implements VideoService {
+public class VideoServiceImpl implements HelperService<Video> {
 
 	@Autowired
 	private CategoryRepository categoryRepository;
@@ -37,7 +37,7 @@ public class VideoServiceImpl implements VideoService {
 	private MessageConfig messageConfig;
 	
 	@Override
-	public List<Video> videoList() {
+	public List<Video> list() {
 		return (List<Video>) videoRepository.findAll();
 	}
 	
@@ -48,7 +48,7 @@ public class VideoServiceImpl implements VideoService {
 
 	@Override
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
-	public String addVideo(Video video) {
+	public String add(Video video) {
 		String message = null;
 		JSONObject jsonObject = new JSONObject();
 		try {
@@ -87,7 +87,7 @@ public class VideoServiceImpl implements VideoService {
 
 	@Override
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
-	public String deleteVideo(Long id) {
+	public String delete(Long id) {
 		JSONObject jsonObject = new JSONObject();
 		try {
 			videoRepository.delete(id);
@@ -96,6 +96,11 @@ public class VideoServiceImpl implements VideoService {
 			e.printStackTrace();
 		}
 		return jsonObject.toString();
+	}
+
+	@Override
+	public Page<Video> findAll(Long id, Pageable pageable) {
+		return null;
 	}
 
 }

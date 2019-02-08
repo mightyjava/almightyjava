@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.mightyjava.captcha.CaptchaGenerator;
 import com.mightyjava.captcha.CaptchaUtils;
-import com.mightyjava.config.MessageConfig;
 import com.mightyjava.model.User;
 import com.mightyjava.service.UserService;
 import com.mightyjava.utils.ConstantUtils;
@@ -101,7 +100,7 @@ public class UserController {
 
 	@GetMapping(value = "/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody String userDelete(@PathVariable Long id) {
-		return userService.deleteUser(id);
+		return userService.delete(id);
 	}
 
 	@PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -111,7 +110,7 @@ public class UserController {
 			response = ErrorUtils.customErrors(result.getAllErrors());
 		} else {
 			if(user.getCaptcha().equals(request.getSession().getAttribute("captcha"))) {
-				response = userService.addUser(user);
+				response = userService.add(user);
 			} else {
 				response = ErrorUtils.captchaError();
 			}
@@ -121,7 +120,7 @@ public class UserController {
 	
 	@PostMapping(value = "/save", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody String saveUser(@Valid @RequestBody User user, BindingResult result) {
-		return (result.hasErrors()) ? ErrorUtils.customErrors(result.getAllErrors()) : userService.addUser(user);
+		return (result.hasErrors()) ? ErrorUtils.customErrors(result.getAllErrors()) : userService.add(user);
 	}
 
 	@GetMapping("/list")

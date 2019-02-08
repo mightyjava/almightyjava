@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
 	private MessageConfig messageConfig;
 	
 	@Override
-	public List<User> userList() {
+	public List<User> list() {
 		return userRepository.userList();
 	}
 	
@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
-	public String addUser(User user) {
+	public String add(User user) {
 		String message = null;
 		JSONObject jsonObject = new JSONObject();
 		try {
@@ -87,7 +87,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
-	public String deleteUser(Long id) {
+	public String delete(Long id) {
 		JSONObject jsonObject = new JSONObject();
 		try {
 			userRepository.delete(id);

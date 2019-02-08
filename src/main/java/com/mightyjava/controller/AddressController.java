@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mightyjava.model.Address;
-import com.mightyjava.service.AddressService;
+import com.mightyjava.service.HelperService;
 import com.mightyjava.service.UserService;
 import com.mightyjava.utils.ErrorUtils;
 import com.mightyjava.utils.MethodUtils;
@@ -26,7 +26,7 @@ import com.mightyjava.utils.MethodUtils;
 @RequestMapping("/address")
 public class AddressController {
 	@Autowired
-	private AddressService addressService;
+	private HelperService<Address> addressService;
 	
 	@Autowired
 	private UserService userService;
@@ -36,7 +36,7 @@ public class AddressController {
 		model.addAttribute("isNew", true);
 		model.addAttribute("addressForm", new Address());
 		model.addAttribute("addressTypes", MethodUtils.addressTypes());
-		model.addAttribute("users", userService.userList());
+		model.addAttribute("users", userService.list());
 		model.addAttribute("user", userService.findByUsername(MethodUtils.findLoggedInUser().getUsername()));
 		return "address/form";
 	}
@@ -46,13 +46,13 @@ public class AddressController {
 		model.addAttribute("isNew", false);
 		model.addAttribute("addressForm", addressService.findOne(id));
 		model.addAttribute("addressTypes", MethodUtils.addressTypes());
-		model.addAttribute("users", userService.userList());
+		model.addAttribute("users", userService.list());
 		return "address/form";
 	}
 	
 	@GetMapping(value = "/delete/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody String addressDelete(@PathVariable Long id) {
-		return addressService.deleteAddress(id);
+		return addressService.delete(id);
 	}
 	
 	@PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -60,7 +60,7 @@ public class AddressController {
 		if(result.hasErrors()) {
 			return ErrorUtils.customErrors(result.getAllErrors());
 		} else {
-			return addressService.addAddress(address);
+			return addressService.add(address);
 		}
 	}
 	

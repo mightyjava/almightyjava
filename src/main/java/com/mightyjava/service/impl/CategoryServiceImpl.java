@@ -16,12 +16,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.mightyjava.config.MessageConfig;
 import com.mightyjava.model.Category;
 import com.mightyjava.repository.CategoryRepository;
-import com.mightyjava.service.CategoryService;
+import com.mightyjava.service.HelperService;
 import com.mightyjava.utils.ConstantUtils;
 
 @Service
 @Transactional(readOnly = true)
-public class CategoryServiceImpl implements CategoryService {
+public class CategoryServiceImpl implements HelperService<Category> {
 
 	@Autowired
 	private CategoryRepository categoryRepository;
@@ -30,7 +30,7 @@ public class CategoryServiceImpl implements CategoryService {
 	private MessageConfig messageConfig;
 	
 	@Override
-	public List<Category> categoryList() {
+	public List<Category> list() {
 		return categoryRepository.categoryList();
 	}
 	
@@ -41,7 +41,7 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
-	public String addCategory(Category category) {
+	public String add(Category category) {
 		String message = null;
 		JSONObject jsonObject = new JSONObject();
 		try {
@@ -71,7 +71,7 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
-	public String deleteCategory(Long id) {
+	public String delete(Long id) {
 		JSONObject jsonObject = new JSONObject();
 		try {
 			categoryRepository.delete(id);
@@ -80,6 +80,11 @@ public class CategoryServiceImpl implements CategoryService {
 			e.printStackTrace();
 		}
 		return jsonObject.toString();
+	}
+
+	@Override
+	public Page<Category> findAll(Long id, Pageable pageable) {
+		return null;
 	}
 
 }

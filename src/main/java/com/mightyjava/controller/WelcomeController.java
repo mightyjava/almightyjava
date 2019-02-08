@@ -8,8 +8,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.mightyjava.model.Video;
+import com.mightyjava.service.HelperService;
 import com.mightyjava.service.UserService;
-import com.mightyjava.service.VideoService;
 import com.mightyjava.utils.MethodUtils;
 
 @Controller
@@ -19,7 +19,7 @@ public class WelcomeController {
 	private UserService userService;
 	
 	@Autowired
-	private VideoService videoService;
+	private HelperService<Video> videoService;
 	
 	@GetMapping("/")
 	public String welcome(Model model) {

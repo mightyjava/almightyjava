@@ -15,11 +15,11 @@ import com.mightyjava.model.Address;
 import com.mightyjava.model.User;
 import com.mightyjava.repository.AddressRepository;
 import com.mightyjava.repository.UserRepository;
-import com.mightyjava.service.AddressService;
+import com.mightyjava.service.HelperService;
 import com.mightyjava.utils.ConstantUtils;
 
 @Service
-public class AddressServiceImpl implements AddressService {
+public class AddressServiceImpl implements HelperService<Address> {
 	@Autowired
 	private AddressRepository addressRepository;
 	@Autowired
@@ -28,7 +28,7 @@ public class AddressServiceImpl implements AddressService {
 	private MessageConfig messageConfig;
 
 	@Override
-	public List<Address> addressList() {
+	public List<Address> list() {
 		return addressRepository.addressList();
 	}
 	
@@ -48,7 +48,7 @@ public class AddressServiceImpl implements AddressService {
 	}
 
 	@Override
-	public String addAddress(Address address) { 
+	public String add(Address address) { 
 		String message = null;
 		JSONObject jsonObject = new JSONObject();
 		try {
@@ -79,7 +79,7 @@ public class AddressServiceImpl implements AddressService {
 	}
 
 	@Override
-	public String deleteAddress(Long id) {
+	public String delete(Long id) {
 		JSONObject jsonObject = new JSONObject();
 		try {
 			addressRepository.delete(id);

@@ -17,8 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mightyjava.model.Category;
 import com.mightyjava.model.Video;
-import com.mightyjava.service.CategoryService;
-import com.mightyjava.service.VideoService;
+import com.mightyjava.service.HelperService;
 import com.mightyjava.utils.ErrorUtils;
 import com.mightyjava.utils.MethodUtils;
 
@@ -26,10 +25,10 @@ import com.mightyjava.utils.MethodUtils;
 public class CommonController {
 	
 	@Autowired	
-	private CategoryService categoryService;
+	private HelperService<Category> categoryService;
 	
 	@Autowired	
-	private VideoService videoService;
+	private HelperService<Video> videoService; 
 	
 	@GetMapping("/category/list")
 	public String categoryList(Model model, Pageable pageable) {
@@ -48,7 +47,7 @@ public class CommonController {
 	
 	@PostMapping(value = "/category/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody String categoryAdd(@Valid @RequestBody Category category, BindingResult result) {
-		return (result.hasErrors()) ? ErrorUtils.customErrors(result.getAllErrors()) : categoryService.addCategory(category);
+		return (result.hasErrors()) ? ErrorUtils.customErrors(result.getAllErrors()) : categoryService.add(category);
 	}
 	
 	@GetMapping("/category/edit/{id}")
@@ -60,7 +59,7 @@ public class CommonController {
 
 	@GetMapping(value = "/category/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody String categoryDelete(@PathVariable Long id) {
-		return categoryService.deleteCategory(id);
+		return categoryService.delete(id);
 	}
 	
 	@GetMapping("/video/list")
@@ -75,26 +74,26 @@ public class CommonController {
 	public String videoForm(Model model) {
 		model.addAttribute("isNew", true);
 		model.addAttribute("videoForm", new Video());
-		model.addAttribute("categories", categoryService.categoryList());
+		model.addAttribute("categories", categoryService.list());
 		return "/video/form";
 	}
 	
 	@PostMapping(value = "/video/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody String videoAdd(@Valid @RequestBody Video video, BindingResult result) {
-		return (result.hasErrors()) ? ErrorUtils.customErrors(result.getAllErrors()) : videoService.addVideo(video);
+		return (result.hasErrors()) ? ErrorUtils.customErrors(result.getAllErrors()) : videoService.add(video);
 	}
 	
 	@GetMapping("/video/edit/{id}")
 	public String videoOne(@PathVariable Long id, Model model) {
 		model.addAttribute("isNew", false);
 		model.addAttribute("videoForm", videoService.findOne(id));
-		model.addAttribute("categories", categoryService.categoryList());
+		model.addAttribute("categories", categoryService.list());
 		return "/video/form";
 	}
 
 	@GetMapping(value = "/video/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody String videoDelete(@PathVariable Long id) {
-		return videoService.deleteVideo(id);
+		return videoService.delete(id);
 	}
 	
 	@GetMapping("/blog/list")

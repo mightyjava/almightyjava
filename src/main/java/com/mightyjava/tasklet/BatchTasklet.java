@@ -18,7 +18,7 @@ public class BatchTasklet implements Tasklet {
 	@Override
 	public RepeatStatus execute(StepContribution contribution, ChunkContext context) throws Exception {
 		System.out.println(context.getStepContext().getJobParameters().get("jobName").toString());
-		userService.userList();
+		userService.list();
 		Thread.sleep(10000); 
 		return RepeatStatus.FINISHED;
 	}
